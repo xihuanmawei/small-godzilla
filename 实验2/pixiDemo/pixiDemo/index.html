@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="js/pixi.min.js"></script>
+    <script>
+		var app = new PIXI.Application(950,600);
+        document.body.appendChild(app.view);
+        
+        
+		var bg = new PIXI.Sprite.fromImage("res/bg.1.png");
+		app.stage.addChild(bg);
+		var shengqi = new PIXI.Sprite.fromImage("res/shengqi.png");
+		app.stage.addChild(shengqi);
+		shengqi.x=250;
+		shengqi.anchor.set(0.5,0.5);
+		shengqi.width=60;
+		shengqi.height=55;
+		
+		var denfen=new PIXI.Text("得分：0");
+		denfen.x=20;
+		denfen.y=20;
+		app.stage.addChild(denfen);
+		
+		var renwu = new PIXI.Sprite.fromImage("res/renwu.png");
+		app.stage.addChild(renwu);
+		renwu.x=950/2;
+		renwu.y=500;
+		renwu.anchor.set(0.5,0.5);
+		renwu.width=60;
+		renwu.height=55;
+		
+		
+		var renwuku = new PIXI.Sprite.fromImage("res/renwuku.png");
+		app.stage.addChild(renwuku);
+		renwuku.x=950/2;
+		renwuku.y=50;
+		renwuku.anchor.set(0.5,0.5);
+		renwuku.width=60;
+		renwuku.height=55;
+		
+	
+		
+		var score=0;
+		var juli=50;
+		
+		renwu.interactive=true;
+		renwu.on("mousemove",move);
+		
+		function move(event){
+			var pos=event.data.getLocalPosition(app.stage);
+			renwu.x=pos.x;
+		}
+		function isbump(obj1,obj2){
+			var L1=obj1.x-25;
+			var R1=obj1.x+25;	
+			var T1=obj1.y-25;
+			var B1=obj1.y+25;
+			var L2 = obj2.x-25;
+			var R2 = obj2.x+25;
+			var T2 = obj2.y-25;
+			var B2 = obj2.y+25;
+			 if( R1<L2 || L1>R2 || T1>B2 || B1<T2 ){
+				 return 1;
+			 }
+			 else {
+				 return 0;
+			 }
+			 
+		}
+		
+		var speed=1;
+		
+		app.ticker.add(animate);
+		function animate(){
+			renwuku.y+=speed;
+			shengqi.y+=speed;
+			renwuku.rotation+=Math.PI/128;
+			if(renwuku.y>650){
+				renwuku.y=-20;
+				renwuku.x = Math.random() * 600;
+					
+			}
+			
+			
+			if(shengqi.y>650){
+				shengqi.y=-20;
+				shengqi.x=Math.random()*600;
+			}
+			if(isbump(renwu,renwuku)==0){
+				
+				renwuku.y=0;
+				renwuku.x = Math.random() * 600;
+				 score+=10;
+				   denfen.text="得分："+score;
+				   if(score>=10){
+					   speed=3;
+					   renwuku.y-=speed;
+				   }
+				
+			}
+			 if(isbump(renwu,shengqi)==0){
+				
+				shengqi.y=0;
+				shengqi.x = Math.random() * 600;
+				 score-=10;
+				   denfen.text="得分："+score;
+				   if(score>=10){
+					   speed=3;
+					   shengqi.y-=speed*1.25;
+				   }
+				
+			}
+			
+			
+		}
+	
+		
+		
+		
+    </script>
+</body>
+</html>
